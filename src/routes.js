@@ -1,7 +1,9 @@
 import React from 'react'
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
-const Colors = React.lazy(() => import('./views/theme/colors/Colors'))
+const dayOff = React.lazy(() => import('./views/theme/Announce/dayOff'))
+const view = React.lazy(() => import('./views/theme/Announce/viewDayOff/viewDetails'))
+
 const Typography = React.lazy(() => import('./views/theme/typography/Typography'))
 
 // Base
@@ -35,7 +37,28 @@ const Range = React.lazy(() => import('./views/forms/range/Range'))
 const Select = React.lazy(() => import('./views/forms/select/Select'))
 const Validation = React.lazy(() => import('./views/forms/validation/Validation'))
 
-const Charts = React.lazy(() => import('./views/charts/Charts'))
+
+//router kien
+const Charts = React.lazy(() => import('./views/addStaff/addStaff'))
+const filterEmployee = React.lazy(() => import('./views/filterEmployee/filterEmployee'))
+
+const TotalNumberOfDaysOff = React.lazy(() => import('./views/TotalNumberOfDaysOff/TotalNumberOfDaysOff'))
+const upadatePerson = React.lazy(() => import('./views/upadatePerson/upadatePerson'))
+const registerPerson = React.lazy(() => import('./views/RegisterPerson/RegisterPerson'))
+const hrRecords = React.lazy(() => import('./views/hrRecords/hrRecords'))
+const totalIncome = React.lazy(() => import('./views/totalIncome/totalIncome'))
+const vacations = React.lazy(() => import('./views/vacations/vacations'))
+const benefitPlan = React.lazy(() => import('./views/benefitPlan/benefitPlan'))
+const anniversaryDate = React.lazy(() => import('./views/anniversaryDate/anniversaryDate'))
+const numberDaysOff = React.lazy(() => import('./views/numberDaysOff/numberDaysOff'))
+const birthdateInMonth = React.lazy(() => import('./views/birthdateInMonth/birthdateInMonth'))
+const benefitsPlanChange = React.lazy(() => import('./views/benefitsPlanChange/benefitsPlanChange'))
+
+
+
+
+
+
 
 // Icons
 const CoreUIIcons = React.lazy(() => import('./views/icons/coreui-icons/CoreUIIcons'))
@@ -53,8 +76,10 @@ const Widgets = React.lazy(() => import('./views/widgets/Widgets'))
 const routes = [
   { path: '/', exact: true, name: 'Home' },
   { path: '/dashboard', name: 'Dashboard', element: Dashboard },
-  { path: '/theme', name: 'Theme', element: Colors, exact: true },
-  { path: '/theme/colors', name: 'Colors', element: Colors },
+  { path: '/thongbao', name: 'Thông báo', element: dayOff, exact: true },
+  // { path: '/thongbao/songaynghi', name: 'Thông báo', element: dayOff, exact: true },
+  { path: '/thongbao/songaynghi', name: 'Số ngày nghỉ', element: dayOff },
+  { path: '/thongbao/viewdetail', name: 'thongbao/viewDtails', element: view },
   { path: '/theme/typography', name: 'Typography', element: Typography },
   { path: '/base', name: 'Base', element: Cards, exact: true },
   { path: '/base/accordion', name: 'Accordion', element: Accordion },
@@ -75,7 +100,28 @@ const routes = [
   { path: '/buttons/buttons', name: 'Buttons', element: Buttons },
   { path: '/buttons/dropdowns', name: 'Dropdowns', element: Dropdowns },
   { path: '/buttons/button-groups', name: 'Button Groups', element: ButtonGroups },
+
+
   { path: '/charts', name: 'Charts', element: Charts },
+  { path: '/filter', name: 'Filter Employee', element: filterEmployee },
+  { path: '/total', name: 'Total Income', element: totalIncome },
+  { path: '/totalnumberofdaysoff', name: 'Total Number Of Days Off', element: TotalNumberOfDaysOff },
+  { path: '/upadateperson', name: 'Upadate Person', element: upadatePerson },
+  { path: '/registerperson', name: 'Register Person', element: registerPerson },
+  { path: '/hrrecords', name: 'HR Records', element: hrRecords },
+  { path: '/totalincome', name: 'Total Income', element: totalIncome },
+  { path: '/vacations', name: 'Vacations', element: vacations },
+  { path: '/benefitplan', name: 'Benefit Plan', element: benefitPlan },
+  { path: '/anniversarydate', name: 'Anniversary Date', element: anniversaryDate },
+  { path: '/numberdaysoff', name: 'Number Days Off', element: numberDaysOff },
+  { path: '/birthdateinmonth', name: 'Birth Date In Month', element: birthdateInMonth },
+  { path: '/benefitsplanchange', name: 'Benefits Plan Change', element: benefitsPlanChange },
+
+
+
+
+  
+
   { path: '/forms', name: 'Forms', element: FormControl, exact: true },
   { path: '/forms/form-control', name: 'Form Control', element: FormControl },
   { path: '/forms/select', name: 'Select', element: Select },

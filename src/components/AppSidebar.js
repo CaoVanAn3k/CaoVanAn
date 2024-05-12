@@ -36,8 +36,37 @@ const AppSidebar = () => {
       }}
     >
       <CSidebarHeader className="border-bottom">
-        <CSidebarBrand to="/">
-          <CIcon customClassName="sidebar-brand-full" icon={logo} height={32} />
+        <CSidebarBrand
+          to="/"
+          style={{
+            textDecoration: 'none',
+            cursor: 'pointer',
+          }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+          >
+            <img
+              src="https://www.bravo.com.vn/wp-content/uploads/2022/11/new-hrm-2048x1869.jpg"
+              className="logo-img"
+              style={{
+                height: '54px',
+                width: '62px',
+                borderRadius: '7px',
+              }}
+            />
+            <h3
+              style={{
+                fontSize: '14px',
+              }}
+            >
+              Human Resource Management
+            </h3>
+          </div>
+          {/* <CIcon customClassName="sidebar-brand-full" icon={logo} height={32} /> */}
           <CIcon customClassName="sidebar-brand-narrow" icon={sygnet} height={32} />
         </CSidebarBrand>
         <CCloseButton
