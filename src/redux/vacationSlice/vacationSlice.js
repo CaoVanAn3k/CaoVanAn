@@ -1,12 +1,12 @@
-import { createSlice,createAsyncThunk,buildCreateSlice } from "@reduxjs/toolkit";
-import { getAllVacation,getAllEmployeeVacation } from "../../service/totalIncomeService";
+import { createSlice,createAsyncThunk } from "@reduxjs/toolkit";
+import { getAllEmployeeByVacation as getAllEmployeeByVacationApi,getAllEmployeeVacationCondition } from "../../service/APIService";
 
 
-export const getVacationReducer = createAsyncThunk(
-  "getVacation",
+export const getAllEmployeeByVacation = createAsyncThunk(
+  "getAllEmployeeByVacation",
   async ()=>{
     try {
-      const data = await getAllVacation();
+      const data = await getAllEmployeeByVacationApi();
       return data
     } catch (error) {
       throw Error(error);
@@ -14,35 +14,24 @@ export const getVacationReducer = createAsyncThunk(
   }
 )
 
-export const getAllVacationReducer = createAsyncThunk(
-  "getAllVacation",
-  async (type,value)=>{
+export const getAllEmployeeByVacationAndCondition = createAsyncThunk(
+  "getAllEmployeeByVacationAndCondition",
+  async (data)=>{
     try {
-      const data = await getAllEmployeeVacation(type,value);
-      return data
+      const response = await getAllEmployeeVacationCondition(data.type,data.value);
+      return response
     } catch (error) {
       throw Error(error);
     }
   }
 )
 
-export const getAnniversaryReducer = createAsyncThunk(
-  "getAnniversary",
-  async ()=>{
-    try {
-      const data = await getAnniversary();
-      return data
-    } catch (error) {
-      throw Error(error);
-    }
-  }
-)
+
 
 const initialState={
   Error:"",
   Loading:false,
-  EmployeesVacation:[],
-  EmployeeeAnniversary:[],
+  EmployeesVacation:[]
 
 }
 export const VacationReducer=createSlice({
@@ -52,36 +41,25 @@ export const VacationReducer=createSlice({
     },
     extraReducers:(builder)=>{
       builder
-      .addCase(getVacationReducer.pending,(state,action)=>{
+      .addCase(getAllEmployeeByVacation.pending,(state,action)=>{
         state.Loading=true;
       })
-      .addCase(getAllVacationReducer.pending,(state,action)=>{
+      .addCase(getAllEmployeeByVacationAndCondition.pending,(state,action)=>{
         state.Loading=true;
       })
-      .addCase(getAnniversaryReducer.pending,(state,action)=>{
-        state.Loading=true;
-      })
-      .addCase(getVacationReducer.fulfilled,(state,action)=>{
+      .addCase(getAllEmployeeByVacation.fulfilled,(state,action)=>{
         state.Loading=false;
         state.EmployeesVacation=action.payload;
       })
-      .addCase(getAllVacationReducer.fulfilled,(state,action)=>{
+      .addCase(getAllEmployeeByVacationAndCondition.fulfilled,(state,action)=>{
         state.Loading=false;
         state.EmployeesVacation=action.payload;
       })
-      .addCase(getAnniversaryReducer.fulfilled,(state,action)=>{
-        state.Loading=false;
-        state.EmployeeeAnniversary=action.payload;
-      })
-      .addCase(getVacationReducer.rejected,(state,action)=>{
+      .addCase(getAllEmployeeByVacation.rejected,(state,action)=>{
         state.Loading=false;
         state.Error=action.error.message || "loi khong lay duoc du lieu";
       })
-      .addCase(getAllVacationReducer.rejected,(state,action)=>{
-        state.Loading=false;
-        state.Error=action.error.message || "loi khong lay duoc duoc";
-      })
-      .addCase(getAnniversaryReducer.rejected,(state,action)=>{
+      .addCase(getAllEmployeeByVacationAndCondition.rejected,(state,action)=>{
         state.Loading=false;
         state.Error=action.error.message || "loi khong lay duoc duoc";
       })

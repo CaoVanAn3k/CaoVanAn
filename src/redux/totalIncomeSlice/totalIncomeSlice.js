@@ -1,10 +1,10 @@
 import { createSlice, createAsyncThunk, buildCreateSlice } from "@reduxjs/toolkit";
-import { getAllEmployees,getAllEmployeeTotalIncomeByCondition } from "../../service/totalIncomeService";
+import { getAllEmployeesByTotalIncome,getAllEmployeeTotalIncomeByCondition } from "../../service/APIService";
 export const getEmployeesByTotalIncome =createAsyncThunk(
   "getEmployeesByTotalIncome",
   async ()=>{
     try {
-     const data = await getAllEmployees();
+     const data = await getAllEmployeesByTotalIncome();
      return data
       
     } catch (error) {
@@ -15,11 +15,10 @@ export const getEmployeesByTotalIncome =createAsyncThunk(
 
 export const getAllEmployeesByTotalIncomeCondition =createAsyncThunk(
   "getAllEmployeesTotalIncomeCondition",
-  async (type,value)=>{
+  async (data)=>{
     try {
-     const data = await getAllEmployeeTotalIncomeByCondition(type,value);
-     return data
-      
+     const response = await getAllEmployeeTotalIncomeByCondition(data.type,data.value);
+     return response;
     } catch (error) {
       throw new Error(error);
     }

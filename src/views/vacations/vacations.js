@@ -1,55 +1,263 @@
-import React, { useReducer } from 'react';
-import { Row, Col, Card, Table } from 'react-bootstrap';
-import Dropdown from 'react-bootstrap/Dropdown';
-import DropdownButton from 'react-bootstrap/DropdownButton';
-import { useEffect } from 'react';
-import { useDispatch,useSelector } from 'react-redux';
-import { getVacationReducer } from '../../redux/vacationSlice/vacationSlice';
+import React, { useReducer } from "react";
+import { Row, Col, Card, Table } from "react-bootstrap";
+import Dropdown from "react-bootstrap/Dropdown";
+import DropdownButton from "react-bootstrap/DropdownButton";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllEmployeeByVacation,getAllEmployeeByVacationAndCondition } from "../../redux/vacationSlice/vacationSlice";
 const vacation = () => {
   const dispatch = useDispatch();
-  const {Loading}=useSelector(state =>state.vacations)
-  useEffect(()=>{
-    dispatch(getVacationReducer());
-  },[])
+  const { EmployeesVacation } = useSelector((state) => state.vacations);
 
+  const handleClickFilterVacationCondition = (type, value) => {
+    window.location.href = `/#/vacations/condition?type=${type}&value=${value}`;
+    const data = {
+      type,
+      value,
+    };
+    dispatch(getAllEmployeeByVacationAndCondition(data));
+  };
+  const handleClickAll = (e) => {
+    e.preventDefault();
+    window.location.href = `/#/vacations/all`;
+    dispatch(getAllEmployeeByVacation());
+  };
 
-  console.log(Loading);
+  useEffect(() => {
+    dispatch(getAllEmployeeByVacation());
+  }, []);
   return (
     <React.Fragment>
       <Row>
         <Col>
           <Card>
             <Card.Header>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
+              <div
+                style={{ display: "flex", alignItems: "center", gap: "2rem" }}
+              >
                 <DropdownButton id="dropdown-basic-button" title="Member">
-                  <Dropdown.Item href="#/action-1">All</Dropdown.Item>
-                  <Dropdown.Item href="#/action-2">Shareholder</Dropdown.Item>
-                  <Dropdown.Item href="#/action-3">Employee</Dropdown.Item>
+                  <Dropdown.Item href="" onClick={handleClickAll}>
+                    All
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    href=""
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleClickFilterVacationCondition(
+                        "member",
+                        "Shareholder",
+                      );
+                    }}
+                  >
+                    Shareholder
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    href=""
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleClickFilterVacationCondition(
+                        "member",
+                        "Employee",
+                      );
+                    }}
+                  >
+                    Employee
+                  </Dropdown.Item>
                 </DropdownButton>
                 <DropdownButton id="dropdown-basic-button" title="Gender">
-                  <Dropdown.Item href="#/action-1">All</Dropdown.Item>
-                  <Dropdown.Item href="#/action-2">Men</Dropdown.Item>
-                  <Dropdown.Item href="#/action-3">Woman</Dropdown.Item>
+                  <Dropdown.Item href="" onClick={handleClickAll}>
+                    All
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    href=""
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleClickFilterVacationCondition("gender", "Male");
+                    }}
+                  >
+                    Male
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    href=""
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleClickFilterVacationCondition("gender", "Female");
+                    }}
+                  >
+                    Female
+                  </Dropdown.Item>
                 </DropdownButton>
                 <DropdownButton id="dropdown-basic-button" title="Ethnicity">
-                  <Dropdown.Item href="#/action-1">All</Dropdown.Item>
-                  <Dropdown.Item href="#/action-2">Caucasion</Dropdown.Item>
-                  <Dropdown.Item href="#/action-3">African American</Dropdown.Item>
-                  <Dropdown.Item href="#/action-3">Asia</Dropdown.Item>
-                  <Dropdown.Item href="#/action-3">Hispanic</Dropdown.Item>
+                  <Dropdown.Item href="" onClick={handleClickAll}>
+                    All
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    href=""
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleClickFilterVacationCondition(
+                        "ethnicity",
+                        "African American",
+                      );
+                    }}
+                  >
+                    African American
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    href=""
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleClickFilterVacationCondition(
+                        "ethnicity",
+                        "Caucasian",
+                      );
+                    }}
+                  >
+                    Caucasian
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    href=""
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleClickFilterVacationCondition(
+                        "ethnicity",
+                        "Asian",
+                      );
+                    }}
+                  >
+                    Asian
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    href=""
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleClickFilterVacationCondition(
+                        "ethnicity",
+                        "Hispanic",
+                      );
+                    }}
+                  >
+                    Hispanic
+                  </Dropdown.Item>
                 </DropdownButton>
                 <DropdownButton id="dropdown-basic-button" title="Department">
-                  <Dropdown.Item href="#/action-1">All</Dropdown.Item>
-                  <Dropdown.Item href="#/action-2">IT</Dropdown.Item>
-                  <Dropdown.Item href="#/action-3">Finance</Dropdown.Item>
-                  <Dropdown.Item href="#/action-3">HR</Dropdown.Item>
-                  <Dropdown.Item href="#/action-3">Marketing</Dropdown.Item>
-                  <Dropdown.Item href="#/action-3">Operations</Dropdown.Item>
-                  <Dropdown.Item href="#/action-3">Sales</Dropdown.Item>
-                  <Dropdown.Item href="#/action-3">Engineering</Dropdown.Item>
-                  <Dropdown.Item href="#/action-3">Legal</Dropdown.Item>
-                  <Dropdown.Item href="#/action-3">Customer service</Dropdown.Item>
-                  <Dropdown.Item href="#/action-3">Research</Dropdown.Item>
+                  <Dropdown.Item href="" onClick={handleClickAll}>
+                    All
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    href=""
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleClickFilterVacationCondition("department", "IT");
+                    }}
+                  >
+                    IT
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    href=""
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleClickFilterVacationCondition(
+                        "department",
+                        "Finance",
+                      );
+                    }}
+                  >
+                    Finance
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    href=""
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleClickFilterVacationCondition("department", "HR");
+                    }}
+                  >
+                    HR
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    href=""
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleClickFilterVacationCondition(
+                        "department",
+                        "Marketing",
+                      );
+                    }}
+                  >
+                    Marketing
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    href=""
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleClickFilterVacationCondition(
+                        "department",
+                        "Operations",
+                      );
+                    }}
+                  >
+                    Operations
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    href=""
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleClickFilterVacationCondition(
+                        "department",
+                        "Sales",
+                      );
+                    }}
+                  >
+                    Sales
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    href=""
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleClickFilterVacationCondition(
+                        "department",
+                        "Engineering",
+                      );
+                    }}
+                  >
+                    Engineering
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    href=""
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleClickFilterVacationCondition(
+                        "department",
+                        "Legal",
+                      );
+                    }}
+                  >
+                    Legal
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    href=""
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleClickFilterVacationCondition(
+                        "department",
+                        "Customer service",
+                      );
+                    }}
+                  >
+                    Customer service
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    href=""
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleClickFilterVacationCondition(
+                        "department",
+                        "Research",
+                      );
+                    }}
+                  >
+                    Research
+                  </Dropdown.Item>
                 </DropdownButton>
               </div>
             </Card.Header>
@@ -67,33 +275,24 @@ const vacation = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                  </tr>
+                  {EmployeesVacation.length > 0 &&
+                    EmployeesVacation.map((employee, index) => {
+                      return (
+                        <tr key={index}>
+                          <th scope="row">{index + 1}</th>
+                          <td>{employee.employeeCode}</td>
+                          <td>{employee.fullName}</td>
+                          <td>{employee.ethnicity}</td>
+                          <td>{employee.gender}</td>
+                          <td>
+                            {employee.shareHolder == 1
+                              ? "Shareholder"
+                              : "Employee"}
+                          </td>
+                          <td>{employee.vacationNumber} day / year</td>
+                        </tr>
+                      );
+                    })}
                 </tbody>
               </Table>
             </Card.Body>

@@ -3,6 +3,7 @@ import TotalIncomeReducer from '../redux/totalIncomeSlice/totalIncomeSlice'
 import VacationReducer from '../redux/vacationSlice/vacationSlice'
 import beneFitSlice from "./../redux/beneFitSlice/beneFitSlice";
 import employeesSlice from "./../redux/EmployeesSlice/EmployeesSlice";
+import personSlice from "./../redux/personSlice/personSlice";
 
 
 
@@ -11,7 +12,8 @@ export const store= configureStore({
         totalIncome:TotalIncomeReducer,
         vacations:VacationReducer,
         beneFit:beneFitSlice,
-        employess:employeesSlice
+        employees:employeesSlice,
+        person:personSlice,
     }
 });
 

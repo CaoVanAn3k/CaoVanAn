@@ -1,13 +1,12 @@
 import { createSlice,createAsyncThunk } from "@reduxjs/toolkit";
-import {getAllBenefits,getAllEmployeeBenefits,getBenefitsPlan} from '../../service/totalIncomeService'
-import axios from "axios";
+import {getAllEmployeeByBenefit,getAllEmployeeBenefitsWithCondition} from '../../service/APIService'
 
 
-export const getBeneFil = createAsyncThunk(
-  "getBeneFil",
+export const getAllEmployeeWithBenefit = createAsyncThunk(
+  "getAllEmployeeWithBenefit",
   async () => {
     try {
-      const respon = await getAllBenefits();
+      const respon = await getAllEmployeeByBenefit();
       return respon
     
     } catch (error) {
@@ -18,9 +17,9 @@ export const getBeneFil = createAsyncThunk(
 
 export const getAllEmployeesBeneFitSliceCondition = createAsyncThunk(
   "getAllBeneFitSliceCondition",
-  async (type,value) => {
+  async (data) => {
     try {
-      const respon = await getAllEmployeeBenefits(type,value);
+      const respon = await getAllEmployeeBenefitsWithCondition(data.type,data.value);
       return respon
     
     } catch (error) {
@@ -28,26 +27,10 @@ export const getAllEmployeesBeneFitSliceCondition = createAsyncThunk(
     }
   }
 )
-
-export const getBenefitsPlanChange = createAsyncThunk(
-  "getBenefitsPlanChange",
-  async () => {
-    try {
-      const respon = await getBenefitsPlan();
-      return respon
-    
-    } catch (error) {
-      throw Error(error);
-    }
-  }
-)
-
-
 const initialState={
   Loading:false,
   Error:"",
-  BeneFil:[],
-  BeneFilPhan:[]
+  Benefits:[]
 }
 
 
@@ -59,36 +42,25 @@ const beneFitSlice = createSlice({
   },
   extraReducers:(builder)=>{
     builder
-    .addCase(getBeneFil.pending,(state,action)=>{
+    .addCase(getAllEmployeeWithBenefit.pending,(state,action)=>{
       state.Loading=true;
     })
     .addCase(getAllEmployeesBeneFitSliceCondition.pending,(state,action)=>{
       state.Loading=true;
     })
-    .addCase(getBenefitsPlanChange.pending,(state,action)=>{
-      state.Loading=true;
-    })
-    .addCase(getBeneFil.fulfilled,(state,action)=>{
+    .addCase(getAllEmployeeWithBenefit.fulfilled,(state,action)=>{
       state.Loading=false;
-      state.BeneFil=action.payload;
+      state.Benefits=action.payload;
     })
     .addCase(getAllEmployeesBeneFitSliceCondition.fulfilled,(state,action)=>{
       state.Loading=false;
-      state.BeneFil=action.payload;
+      state.Benefits=action.payload;
     })
-    .addCase(getBenefitsPlanChange.fulfilled,(state,action)=>{
-      state.Loading=false;
-      state.BeneFilPhan=action.payload;
-    })
-    .addCase(getBeneFil.rejected,(state,action)=>{
+    .addCase(getAllEmployeeWithBenefit.rejected,(state,action)=>{
       state.Loading=false;
       state.Error=action.error.message || "khong lay duoc du lieu";
     })
     .addCase(getAllEmployeesBeneFitSliceCondition.rejected,(state,action)=>{
-      state.Loading=false;
-      state.Error=action.error.message || "khong lay duoc du lieu";
-    })
-    .addCase(getBenefitsPlanChange.rejected,(state,action)=>{
       state.Loading=false;
       state.Error=action.error.message || "khong lay duoc du lieu";
     })

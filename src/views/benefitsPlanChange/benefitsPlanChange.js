@@ -1,18 +1,17 @@
 import React, { useEffect } from 'react';
 import { Row, Col, Card, Table } from 'react-bootstrap';
-import Dropdown from 'react-bootstrap/Dropdown';
-import DropdownButton from 'react-bootstrap/DropdownButton';
-import { getBeneFil } from '../../redux/beneFitSlice/beneFitSlice'; 
+import Button from 'react-bootstrap/Button';
+import { getBenefitsPlanChange } from '../../redux/EmployeesSlice/EmployeesSlice'; 
 import { useDispatch, useSelector } from 'react-redux';
 
 
 const benefitsPlanChange = () => {
   const dispatch =useDispatch();
-  const {Loading} = useSelector(state => state.beneFit)
+  const {BenefitsPlan} = useSelector(state => state.employees);
+
   useEffect(()=>{
-    dispatch(getBeneFil());
+    dispatch(getBenefitsPlanChange());
   },[])
-  console.log(Loading);
   return (
     <React.Fragment>
       <Row>
@@ -28,48 +27,39 @@ const benefitsPlanChange = () => {
                     <th>Full name</th>
                     <th>Ethnicity</th>
                     <th>Gender</th>
+                    <th>ShareHolder</th>
                     <th>Benefit plan new </th>
                     <th>Deductable new</th>
                     <th>Percentage copay new</th>
                     <th>Pay rate new</th>
-               
+                    <th>Alert</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                   
-                  </tr>
+                  {BenefitsPlan.length>0 && BenefitsPlan.map((employee,index)=>{
+                    return (
+                      <tr key={index}>
+                          <th scope="row">{index + 1}</th>
+                          <td>{employee.employeeCode}</td>
+                          <td>{employee.fullName}</td>
+                          <td>{employee.ethnicity}</td>
+                          <td>{employee.gender}</td>
+                          <td>
+                            {employee.shareHolder == 1
+                              ? "Shareholder"
+                              : "Employee"}
+                          </td>
+                          <td>{employee.benefitPlanName}</td>
+                          <td>{employee.deductable.toLocaleString("en-US", {
+                              style: "currency",
+                              currency: "USD",
+                            })}</td>
+                          <td>{employee.percentageCopay}%</td>
+                          <td>{employee.payRateName}</td>
+                          <td><Button variant="outline-warning">Warning</Button></td>
+                        </tr>
+                    )
+                  })}
                 </tbody>
               </Table>
             </Card.Body>
