@@ -123,9 +123,18 @@ export const getAllPersonNotEmployee = async () => {
   }
 };
 
-export const updatePersonToEmployee = async (data) => {
+export const addNewPerson = async (data) => {
   try {
     const response = await axios.post(url + "/employees/save-personal", data);
+    return response.data;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export const updatePersonToEmployee = async (data) => {
+  try {
+    const response = await axios.post(url + "/employees/save-employee", data);
     return response.data;
   } catch (err) {
     throw new Error(err);

@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Row, Col, Card, Form, Button } from "react-bootstrap";
+import { useDispatch } from "react-redux";
+import { addNewPerson } from "../../redux/personSlice/personSlice";
+import { toast } from "react-toastify";
 
 const UpdatePerson = () => {
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     currentFirstName: "",
     currentLastName: "",
@@ -23,8 +27,54 @@ const UpdatePerson = () => {
   });
   const [countryList, setCountryList] = useState([]);
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (
+      formData.currentFirstName === "" ||
+      formData.currentMiddleName === "" ||
+      formData.currentLastName === "" ||
+      formData.birthDate === "" ||
+      formData.ssn === "" ||
+      formData.driverLicense === "" ||
+      formData.currentAddress1 === "" ||
+      formData.currentAddress2 === "" ||
+      formData.currentCity === "" ||
+      formData.currentCountry === "" ||
+      formData.currentZip === "" ||
+      formData.currentGender === "" ||
+      formData.currentPhoneNumber === "" ||
+      formData.currentPersonalEmail === "" ||
+      formData.currentMaritalStatus === "" ||
+      formData.ethnicity === "" ||
+      formData.shareholderStatus === ""
+    ) {
+      toast.error("Please complete all information");
+    } else {
+      setFormData({
+        ...formData,
+        currentMaritalStatus:
+          formData.currentMaritalStatus === "Single" ? 1 : 2,
+      });
+      setFormData({
+        ...formData,
+        shareholderStatus: formData.shareholderStatus === "Shareholder" ? 1 : 2,
+      });
+      dispatch(addNewPerson(formData));
+    }
+  };
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    if (name === "birthDate") {
+      const date = new Date(value);
+      const now = new Date();
+      const subtractYear = now.getFullYear() - date.getFullYear();
+      if (subtractYear < 18) {
+        toast.error("Person must be greater than or equals by 18");
+        return;
+      }
+      setFormData({ ...formData, birthDate: date });
+      return;
+    }
     setFormData({ ...formData, [name]: value });
   };
 
@@ -48,7 +98,7 @@ const UpdatePerson = () => {
               <Card.Title as="h5">Register Person</Card.Title>
             </Card.Header>
             <Card.Body>
-              <Form>
+              <Form onSubmit={handleSubmit}>
                 <Row gy={3}>
                   <Form.Group
                     className="mb-3"
@@ -66,10 +116,15 @@ const UpdatePerson = () => {
                   <Form.Group
                     className="mb-3"
                     as={Col}
-                    controlId="formGridPassword"
+                    controlId="formGridEmail"
                   >
-                    <Form.Label>Current Last Name</Form.Label>
-                    <Form.Control type="text" />
+                    <Form.Label>Current Middle Name</Form.Label>
+                    <Form.Control
+                      name="currentMiddleName"
+                      value={formData.currentMiddleName}
+                      onChange={handleInputChange}
+                      type="text"
+                    />
                   </Form.Group>
                 </Row>
 
@@ -77,10 +132,15 @@ const UpdatePerson = () => {
                   <Form.Group
                     className="mb-3"
                     as={Col}
-                    controlId="formGridEmail"
+                    controlId="formGridPassword"
                   >
-                    <Form.Label>Current Middle Name</Form.Label>
-                    <Form.Control type="text" />
+                    <Form.Label>Current Last Name</Form.Label>
+                    <Form.Control
+                      name="currentLastName"
+                      value={formData.currentLastName}
+                      onChange={handleInputChange}
+                      type="text"
+                    />
                   </Form.Group>
 
                   <Form.Group
@@ -89,7 +149,12 @@ const UpdatePerson = () => {
                     controlId="formGridPassword"
                   >
                     <Form.Label>Birth Date</Form.Label>
-                    <Form.Control type="date" />
+                    <Form.Control
+                      name="birthDate"
+                      value={formData.birthDate}
+                      onChange={handleInputChange}
+                      type="date"
+                    />
                   </Form.Group>
                 </Row>
 
@@ -100,16 +165,25 @@ const UpdatePerson = () => {
                     controlId="formGridEmail"
                   >
                     <Form.Label>Social Security Number</Form.Label>
-                    <Form.Control type="text" />
+                    <Form.Control
+                      name="ssn"
+                      value={formData.ssn}
+                      onChange={handleInputChange}
+                      type="text"
+                    />
                   </Form.Group>
-
                   <Form.Group
                     className="mb-3"
                     as={Col}
                     controlId="formGridPassword"
                   >
                     <Form.Label>Drivers License</Form.Label>
-                    <Form.Control type="text" />
+                    <Form.Control
+                      name="driverLicense"
+                      value={formData.driverLicense}
+                      onChange={handleInputChange}
+                      type="text"
+                    />
                   </Form.Group>
                 </Row>
                 <Row gy={3}>
@@ -119,7 +193,12 @@ const UpdatePerson = () => {
                     controlId="formGridEmail"
                   >
                     <Form.Label>Current Address1</Form.Label>
-                    <Form.Control type="text" />
+                    <Form.Control
+                      name="currentAddress1"
+                      value={formData.currentAddress1}
+                      onChange={handleInputChange}
+                      type="text"
+                    />
                   </Form.Group>
 
                   <Form.Group
@@ -128,7 +207,12 @@ const UpdatePerson = () => {
                     controlId="formGridPassword"
                   >
                     <Form.Label>Current Address2</Form.Label>
-                    <Form.Control type="text" />
+                    <Form.Control
+                      name="currentAddress2"
+                      value={formData.currentAddress2}
+                      onChange={handleInputChange}
+                      type="text"
+                    />
                   </Form.Group>
                 </Row>
                 <Row gy={3}>
@@ -138,7 +222,12 @@ const UpdatePerson = () => {
                     controlId="formGridEmail"
                   >
                     <Form.Label>Current City</Form.Label>
-                    <Form.Control type="text" />
+                    <Form.Control
+                      name="currentCity"
+                      value={formData.currentCity}
+                      onChange={handleInputChange}
+                      type="text"
+                    />
                   </Form.Group>
                   <Form.Group
                     className="mb-3"
@@ -148,9 +237,9 @@ const UpdatePerson = () => {
                     <Form.Label>Current Country</Form.Label>
                     <Form.Select
                       aria-label="Default select example"
-                      // name="typeOfWork"
-                      // value={formData.typeOfWork}
-                      // onChange={handleInputChange}
+                      name="currentCountry"
+                      value={formData.currentCountry}
+                      onChange={handleInputChange}
                     >
                       <option>Select country</option>
                       {countryList.length > 0 &&
@@ -172,7 +261,12 @@ const UpdatePerson = () => {
                     controlId="formGridEmail"
                   >
                     <Form.Label>Current Zip</Form.Label>
-                    <Form.Control type="text" />
+                    <Form.Control
+                      name={formData.currentZip}
+                      value={formData.currentZip}
+                      onChange={handleInputChange}
+                      type="text"
+                    />
                   </Form.Group>
 
                   <Form.Group
@@ -183,9 +277,9 @@ const UpdatePerson = () => {
                     <Form.Label>Current Gender</Form.Label>
                     <Form.Select
                       aria-label="Default select example"
-                      // name="typeOfWork"
-                      // value={formData.typeOfWork}
-                      // onChange={handleInputChange}
+                      name={formData.currentGender}
+                      value={formData.currentGender}
+                      onChange={handleInputChange}
                     >
                       <option>Select gender</option>
                       <option value="Full-Time">Male</option>
@@ -200,7 +294,12 @@ const UpdatePerson = () => {
                     controlId="formGridEmail"
                   >
                     <Form.Label>Current Phone Number</Form.Label>
-                    <Form.Control type="text" />
+                    <Form.Control
+                      name={formData.currentPhoneNumber}
+                      value={formData.currentPhoneNumber}
+                      onChange={handleInputChange}
+                      type="text"
+                    />
                   </Form.Group>
 
                   <Form.Group
@@ -209,7 +308,12 @@ const UpdatePerson = () => {
                     controlId="formGridPassword"
                   >
                     <Form.Label>Current Personal Email</Form.Label>
-                    <Form.Control type="text" />
+                    <Form.Control
+                      name={formData.currentPersonalEmail}
+                      value={formData.currentPersonalEmail}
+                      onChange={handleInputChange}
+                      type="text"
+                    />
                   </Form.Group>
                 </Row>
                 <Row gy={3}>
@@ -221,9 +325,9 @@ const UpdatePerson = () => {
                     <Form.Label>Current Marital Status</Form.Label>
                     <Form.Select
                       aria-label="Default select example"
-                      // name="typeOfWork"
-                      // value={formData.typeOfWork}
-                      // onChange={handleInputChange}
+                      name={formData.currentMaritalStatus}
+                      value={formData.currentMaritalStatus}
+                      onChange={handleInputChange}
                     >
                       <option>Select marital status</option>
                       <option value="Full-Time">Single</option>
@@ -237,7 +341,12 @@ const UpdatePerson = () => {
                     controlId="formGridPassword"
                   >
                     <Form.Label>Ethnicity</Form.Label>
-                    <Form.Control type="text" />
+                    <Form.Control
+                      name={formData.ethnicity}
+                      value={formData.ethnicity}
+                      onChange={handleInputChange}
+                      type="text"
+                    />
                   </Form.Group>
                 </Row>
                 <Row gy={3}>
@@ -249,9 +358,9 @@ const UpdatePerson = () => {
                     <Form.Label>Shareholder Status</Form.Label>
                     <Form.Select
                       aria-label="Default select example"
-                      // name="typeOfWork"
-                      // value={formData.typeOfWork}
-                      // onChange={handleInputChange}
+                      name={formData.shareholderStatus}
+                      value={formData.shareholderStatus}
+                      onChange={handleInputChange}
                     >
                       <option>Select shareholder status</option>
                       <option value="Full-Time">Shareholder</option>
@@ -266,7 +375,11 @@ const UpdatePerson = () => {
                     style={{ display: "flex", flexDirection: "column" }}
                   >
                     <Form.Label>Add new person</Form.Label>
-                    <Button variant="primary" style={{ width: "max-content" }}>
+                    <Button
+                      type="submit"
+                      variant="primary"
+                      style={{ width: "max-content" }}
+                    >
                       Add Person
                     </Button>
                   </Form.Group>

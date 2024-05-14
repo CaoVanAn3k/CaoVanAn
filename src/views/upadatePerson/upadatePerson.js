@@ -8,7 +8,10 @@ import {
   PayRate,
 } from "../../service/APIService";
 import { toast } from "react-toastify";
-import { updatePersonToEmployee } from "../../redux/personSlice/personSlice";
+import {
+  updatePersonToEmployee,
+  updatePersonalListAfterBecomeToEmployee,
+} from "../../redux/personSlice/personSlice";
 import { useDispatch } from "react-redux";
 
 const upadatePerson = () => {
@@ -49,7 +52,13 @@ const upadatePerson = () => {
       toast.error("Please complete all information");
     } else {
       setFormData({ ...formData, personId: person.personalId });
+      setFormData({
+        ...formData,
+        typeOfWork: formData.typeOfWork === "Full-Time" ? 1 : 2,
+      });
+      console.log(formData);
       dispatch(updatePersonToEmployee(formData));
+      dispatch(updatePersonalListAfterBecomeToEmployee(person.personalId));
     }
   };
   const handleInputChange = (e) => {
@@ -77,6 +86,8 @@ const upadatePerson = () => {
           return;
         }
       }
+      setFormData({ ...formData, hireDateForWorking: date });
+      return;
     }
     if (name === "numberDayRequirementOfWorkingPerMonth") {
       const hasRegex = /^\d*$/;
@@ -98,6 +109,7 @@ const upadatePerson = () => {
   useEffect(() => {
     setPerson(JSON.parse(sessionStorage.getItem("person")));
   }, []);
+  console.log(formData);
   return (
     <React.Fragment>
       <Row>
