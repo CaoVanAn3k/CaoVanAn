@@ -123,6 +123,15 @@ export const getAllPersonNotEmployee = async () => {
   }
 };
 
+export const updatePersonToEmployee = async (data) => {
+  try {
+    const response = await axios.post(url + "/employees/save-personal", data);
+    return response.data;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
 // mock api
 export const Department = () => {
   const data = [
@@ -440,30 +449,30 @@ export const Supervisor = () => {
   const data = [
     {
       id: 1,
-      supervisorName: "John Doe"
+      supervisorName: "John Doe",
     },
     {
       id: 2,
-      supervisorName: "Jane Smith"
+      supervisorName: "Jane Smith",
     },
     {
       id: 3,
-      supervisorName: "Adam Johnson"
+      supervisorName: "Adam Johnson",
     },
     {
       id: 4,
-      supervisorName: "Emily Brown"
+      supervisorName: "Emily Brown",
     },
     {
       id: 5,
-      supervisorName: "Michael Williams"
+      supervisorName: "Michael Williams",
     },
   ];
   return data;
 };
 
-export const Location=()=>{
-  const data= [
+export const Location = () => {
+  const data = [
     {
       id: 1,
       location: "New York",
@@ -503,13 +512,13 @@ export const Location=()=>{
     {
       id: 10,
       location: "Boston",
-    }
+    },
   ];
   return data;
-}
+};
 
-export const PayRate= ()=>{
-  const data= [
+export const PayRate = () => {
+  const data = [
     {
       id: 1,
       payRate: "Standard",
@@ -549,7 +558,7 @@ export const PayRate= ()=>{
     {
       id: 10,
       payRate: "Junior",
-    }
+    },
   ];
   return data;
-}
+};

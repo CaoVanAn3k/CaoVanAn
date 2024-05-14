@@ -7,15 +7,18 @@ import {
   Location,
   PayRate,
 } from "../../service/APIService";
+import { toast } from "react-toastify";
+import { updatePersonToEmployee } from "../../redux/personSlice/personSlice";
+import { useDispatch } from "react-redux";
 
 const upadatePerson = () => {
+  const dispatch = useDispatch();
   const [person, setPerson] = useState(null);
   const [divisionView, setDivisionView] = useState([]);
   const [formData, setFormData] = useState({
     personId: "",
     hireDateForWorking: "",
     numberDayRequirementOfWorkingPerMonth: "",
-    ssn: "",
     department: "",
     division: "",
     jobTitle: "",
@@ -30,9 +33,27 @@ const upadatePerson = () => {
   const dataLocation = Location();
   const dataPayRate = PayRate();
 
+  const handleSubmitForm = (e) => {
+    e.preventDefault();
+    if (
+      formData.numberDayRequirementOfWorkingPerMonth === "" ||
+      formData.typeOfWork === "" ||
+      formData.department === "" ||
+      formData.division === "" ||
+      formData.hireDateForWorking === "" ||
+      formData.jobTitle === "" ||
+      formData.supervisor === "" ||
+      formData.location === "" ||
+      formData.payRate === ""
+    ) {
+      toast.error("Please complete all information");
+    } else {
+      setFormData({ ...formData, personId: person.personalId });
+      dispatch(updatePersonToEmployee(formData));
+    }
+  };
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    console.log(name);
     if (name === "department") {
       const data = dataDivision.filter((item) => {
         return item.department === value;
@@ -41,14 +62,36 @@ const upadatePerson = () => {
     }
     if (name === "division") {
       const data = divisionView.find((item) => item.jobName === value);
-      setFormData({ ...formData, jobTitle: data.jobTitle });
+      setFormData({ ...formData, jobTitle: data.jobTitle, [name]: value });
       return;
     }
-    if(name==="hireDateForWorking"){
-      const date= new Date(value);
-      const now= new Date();
-      console.log(date.getUTCDate());
-      console.log(now.getUTCDate());
+    if (name === "hireDateForWorking") {
+      const date = new Date(value);
+      const now = new Date();
+      if (date < now) {
+        if (date.getDate() !== now.getDate()) {
+          toast.error(
+            "The Hire date must be greater than or equal to the current date",
+          );
+          setFormData({ ...formData, hireDateForWorking: "" });
+          return;
+        }
+      }
+    }
+    if (name === "numberDayRequirementOfWorkingPerMonth") {
+      const hasRegex = /^\d*$/;
+      if (!hasRegex.test(value)) {
+        toast.error(
+          "Number day requirement of working per month must be number",
+        );
+        return;
+      }
+      if (value !== "" && (parseInt(value) < 1 || parseInt(value) > 26)) {
+        toast.error(
+          "Number day requirement of working per month must be greater than 1 and less than 26",
+        );
+        return;
+      }
     }
     setFormData({ ...formData, [name]: value });
   };
@@ -64,7 +107,7 @@ const upadatePerson = () => {
               <Card.Title as="h5">Upadate Person</Card.Title>
             </Card.Header>
             <Card.Body>
-              <Form>
+              <Form onSubmit={handleSubmitForm}>
                 <Row gy={3}>
                   <Form.Group
                     className="mb-3"
@@ -76,7 +119,10 @@ const upadatePerson = () => {
                     </Form.Label>
                     <Form.Control
                       type="text"
-                      placeholder="Enter number Day Requirement Of Working PerMonth"
+                      name="numberDayRequirementOfWorkingPerMonth"
+                      value={formData.numberDayRequirementOfWorkingPerMonth}
+                      onChange={handleInputChange}
+                      placeholder="Enter number Day Requirement Of Working PerMonth (1- 26)"
                     />
                   </Form.Group>
 
@@ -153,7 +199,13 @@ const upadatePerson = () => {
                     controlId="formGridPassword"
                   >
                     <Form.Label>HireDate ForWorking</Form.Label>
-                    <Form.Control type="date" name="hireDateForWorking" value={formData.hireDateForWorking} onChange={handleInputChange} placeholder="Password" />
+                    <Form.Control
+                      type="date"
+                      name="hireDateForWorking"
+                      value={formData.hireDateForWorking}
+                      onChange={handleInputChange}
+                      placeholder="Password"
+                    />
                   </Form.Group>
 
                   <Form.Group
@@ -224,15 +276,6 @@ const upadatePerson = () => {
                     as={Col}
                     controlId="formGridPassword"
                   >
-                    <Form.Label>SSN</Form.Label>
-                    <Form.Control type="text" placeholder="SSN" />
-                  </Form.Group>
-
-                  <Form.Group
-                    className="mb-3"
-                    as={Col}
-                    controlId="formGridPassword"
-                  >
                     <Form.Label>Pay Rate</Form.Label>
                     <Form.Select
                       aria-label="Default select example"
@@ -250,8 +293,22 @@ const upadatePerson = () => {
                       })}
                     </Form.Select>
                   </Form.Group>
+                  <Form.Group
+                    className="mb-3"
+                    as={Col}
+                    controlId="formGridPassword"
+                    style={{ display: "flex", flexDirection: "column" }}
+                  >
+                    <Form.Label>Update to employee</Form.Label>
+                    <Button
+                      type="submit"
+                      variant="primary"
+                      style={{ width: "max-content" }}
+                    >
+                      Update
+                    </Button>
+                  </Form.Group>
                 </Row>
-                <Button variant="primary">Update</Button>
               </Form>
             </Card.Body>
           </Card>
