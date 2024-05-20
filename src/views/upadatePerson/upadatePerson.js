@@ -28,7 +28,7 @@ const upadatePerson = () => {
     supervisor: "",
     location: "",
     typeOfWork: "",
-    payRate: "",
+    payRateName: "",
   });
   const dataDepartment = Department();
   const dataDivision = Division();
@@ -36,7 +36,7 @@ const upadatePerson = () => {
   const dataLocation = Location();
   const dataPayRate = PayRate();
 
-  const handleSubmitForm = (e) => {
+  const handleSubmitForm = async (e) => {
     e.preventDefault();
     if (
       formData.numberDayRequirementOfWorkingPerMonth === "" ||
@@ -47,18 +47,22 @@ const upadatePerson = () => {
       formData.jobTitle === "" ||
       formData.supervisor === "" ||
       formData.location === "" ||
-      formData.payRate === ""
+      formData.payRateName === ""
     ) {
       toast.error("Please complete all information");
     } else {
-      setFormData({ ...formData, personId: person.personalId });
-      setFormData({
+      const processedFormData = {
         ...formData,
+        personId: person.personalId,
         typeOfWork: formData.typeOfWork === "Full-Time" ? 1 : 2,
-      });
-      console.log(formData);
-      dispatch(updatePersonToEmployee(formData));
+        hireDateForWorking: new Date(formData.hireDateForWorking),
+      };
+      dispatch(updatePersonToEmployee(processedFormData));
       dispatch(updatePersonalListAfterBecomeToEmployee(person.personalId));
+      toast.success("Update successfully");
+      setTimeout(()=>{
+        window.location.href="/#/hrrecords";
+      },3000);
     }
   };
   const handleInputChange = (e) => {
@@ -86,8 +90,6 @@ const upadatePerson = () => {
           return;
         }
       }
-      setFormData({ ...formData, hireDateForWorking: date });
-      return;
     }
     if (name === "numberDayRequirementOfWorkingPerMonth") {
       const hasRegex = /^\d*$/;
@@ -109,7 +111,6 @@ const upadatePerson = () => {
   useEffect(() => {
     setPerson(JSON.parse(sessionStorage.getItem("person")));
   }, []);
-  console.log(formData);
   return (
     <React.Fragment>
       <Row>
@@ -291,8 +292,8 @@ const upadatePerson = () => {
                     <Form.Label>Pay Rate</Form.Label>
                     <Form.Select
                       aria-label="Default select example"
-                      name="payRate"
-                      value={formData.payRate}
+                      name="payRateName"
+                      value={formData.payRateName}
                       onChange={handleInputChange}
                     >
                       <option>Select pay rate</option>

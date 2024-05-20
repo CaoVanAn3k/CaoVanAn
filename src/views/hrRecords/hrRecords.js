@@ -1,20 +1,38 @@
-import React, { useEffect } from "react";
-import { Row, Col, Card, Table, Button } from "react-bootstrap";
+import React, { useEffect,useState } from "react";
+import { Row, Col, Card, Table } from "react-bootstrap";
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllPerson } from "../../redux/personSlice/personSlice";
+import {
+  getAllPerson,
+  deletePersonByPersonId,
+  updatePersonalListAfterBecomeToEmployee
+} from "../../redux/personSlice/personSlice";
 
 const totalIncome = () => {
   const dispatch = useDispatch();
-  const navigate= useNavigate()
+  const navigate = useNavigate();
   const { Personals } = useSelector((state) => state.person);
+  const [openModal,setOpenModal] =useState(false);
+  const [personDelete,setPersonDelete] = useState(null);
 
   useEffect(() => {
     dispatch(getAllPerson());
   }, []);
-  const handleUpdateToEmployee=(person)=>{
-    sessionStorage.setItem("person",JSON.stringify(person));
-    window.location.href="/#/upadateperson";
+  const handleUpdateToEmployee = (person) => {
+    sessionStorage.setItem("person", JSON.stringify(person));
+    window.location.href = "/#/upadateperson";
+  };
+  const showModalView = (person) => {
+    setOpenModal(true);
+    setPersonDelete(person);
+    
+  };
+  const handleDeletePerson= ()=>{
+    setOpenModal(false);
+    dispatch(deletePersonByPersonId(personDelete.personalId));
+    dispatch(updatePersonalListAfterBecomeToEmployee(personDelete.personalId));
   }
   return (
     <React.Fragment>
@@ -54,10 +72,10 @@ const totalIncome = () => {
                 </thead>
                 <tbody>
                   {Personals.length > 0 &&
-                    Personals.map((person,index) => {
+                    Personals.map((person, index) => {
                       return (
                         <tr key={person.personalId}>
-                          <td>{index+1}</td>
+                          <td>{index + 1}</td>
                           <td>
                             {person.currentFirstName} {person.currentMiddleName}{" "}
                             {person.currentLastName}
@@ -78,9 +96,31 @@ const totalIncome = () => {
                           <td>{person.currentZip}</td>
                           <td>{person.socialSecurityNumber}</td>
                           <td>
-                            <div style={{display: "flex", gap: "0.5rem"}}>
-                            <Button variant="outline-danger" style={{width: "30px", height: "30px", fontSize: "12px"}}>X</Button>
-                            <Button variant="outline-success" type="button" onClick={()=>handleUpdateToEmployee(person)} style={{width: "30px", height: "30px",fontSize: "12px"}}>➞</Button>
+                            <div style={{ display: "flex", gap: "0.5rem" }}>
+                              <Button
+                                variant="outline-danger"
+                                type="button"
+                                onClick={() => showModalView(person)}
+                                style={{
+                                  width: "30px",
+                                  height: "30px",
+                                  fontSize: "12px",
+                                }}
+                              >
+                                X
+                              </Button>
+                              <Button
+                                variant="outline-success"
+                                type="button"
+                                onClick={() => handleUpdateToEmployee(person)}
+                                style={{
+                                  width: "30px",
+                                  height: "30px",
+                                  fontSize: "12px",
+                                }}
+                              >
+                                ➞
+                              </Button>
                             </div>
                           </td>
                         </tr>
@@ -91,6 +131,25 @@ const totalIncome = () => {
             </Card.Body>
           </Card>
         </Col>
+        {openModal && <div
+          className="modal show"
+          style={{ display: "block", position: "fixed",top: "10%", left: "50%", transform: "translateX(-50%)"}}
+        >
+          <Modal.Dialog>
+            <Modal.Header closeButton>
+              <Modal.Title>Warning</Modal.Title>
+            </Modal.Header>
+
+            <Modal.Body>
+              <p>Are you sure delete the person?</p>
+            </Modal.Body>
+
+            <Modal.Footer>
+              <Button variant="secondary" type="button" onClick={()=>setOpenModal(false)}>Cancel</Button>
+              <Button variant="primary" type="button" onClick={handleDeletePerson}>Yes</Button>
+            </Modal.Footer>
+          </Modal.Dialog>
+        </div>}
       </Row>
     </React.Fragment>
   );

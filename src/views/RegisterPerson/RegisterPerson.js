@@ -50,16 +50,17 @@ const UpdatePerson = () => {
     ) {
       toast.error("Please complete all information");
     } else {
-      setFormData({
+      const processedFormData = {
         ...formData,
-        currentMaritalStatus:
-          formData.currentMaritalStatus === "Single" ? 1 : 2,
-      });
-      setFormData({
-        ...formData,
+        currentMaritalStatus: formData.currentMaritalStatus === "Single" ? 1 : 2,
         shareholderStatus: formData.shareholderStatus === "Shareholder" ? 1 : 2,
-      });
-      dispatch(addNewPerson(formData));
+        birthDate: new Date(formData.birthDate)
+      };
+      dispatch(addNewPerson(processedFormData));
+      toast.success("Add person successfully");
+      setTimeout(()=>{
+        window.location.href="/#/hrrecords";
+      },3000);
     }
   };
   const handleInputChange = (e) => {
@@ -72,8 +73,6 @@ const UpdatePerson = () => {
         toast.error("Person must be greater than or equals by 18");
         return;
       }
-      setFormData({ ...formData, birthDate: date });
-      return;
     }
     setFormData({ ...formData, [name]: value });
   };
@@ -262,7 +261,7 @@ const UpdatePerson = () => {
                   >
                     <Form.Label>Current Zip</Form.Label>
                     <Form.Control
-                      name={formData.currentZip}
+                      name="currentZip"
                       value={formData.currentZip}
                       onChange={handleInputChange}
                       type="text"
@@ -277,7 +276,7 @@ const UpdatePerson = () => {
                     <Form.Label>Current Gender</Form.Label>
                     <Form.Select
                       aria-label="Default select example"
-                      name={formData.currentGender}
+                      name="currentGender"
                       value={formData.currentGender}
                       onChange={handleInputChange}
                     >
@@ -295,7 +294,7 @@ const UpdatePerson = () => {
                   >
                     <Form.Label>Current Phone Number</Form.Label>
                     <Form.Control
-                      name={formData.currentPhoneNumber}
+                      name="currentPhoneNumber"
                       value={formData.currentPhoneNumber}
                       onChange={handleInputChange}
                       type="text"
@@ -309,7 +308,7 @@ const UpdatePerson = () => {
                   >
                     <Form.Label>Current Personal Email</Form.Label>
                     <Form.Control
-                      name={formData.currentPersonalEmail}
+                      name="currentPersonalEmail"
                       value={formData.currentPersonalEmail}
                       onChange={handleInputChange}
                       type="text"
@@ -325,7 +324,7 @@ const UpdatePerson = () => {
                     <Form.Label>Current Marital Status</Form.Label>
                     <Form.Select
                       aria-label="Default select example"
-                      name={formData.currentMaritalStatus}
+                      name="currentMaritalStatus"
                       value={formData.currentMaritalStatus}
                       onChange={handleInputChange}
                     >
@@ -342,7 +341,7 @@ const UpdatePerson = () => {
                   >
                     <Form.Label>Ethnicity</Form.Label>
                     <Form.Control
-                      name={formData.ethnicity}
+                      name="ethnicity"
                       value={formData.ethnicity}
                       onChange={handleInputChange}
                       type="text"
@@ -358,7 +357,7 @@ const UpdatePerson = () => {
                     <Form.Label>Shareholder Status</Form.Label>
                     <Form.Select
                       aria-label="Default select example"
-                      name={formData.shareholderStatus}
+                      name="shareholderStatus"
                       value={formData.shareholderStatus}
                       onChange={handleInputChange}
                     >

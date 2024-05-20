@@ -36,24 +36,24 @@ const _nav = [
     to: "/hrrecords",
     icon: <CIcon icon={cilChartPie} customClassName="nav-icon" />,
   },
-  {
-    component: CNavItem,
-    name: "Total Number Of Days Off",
-    to: "/totalnumberofdaysoff",
-    icon: <CIcon icon={cilChartPie} customClassName="nav-icon" />,
-  },
+  // {
+  //   component: CNavItem,
+  //   name: "Total Number Of Days Off",
+  //   to: "/totalnumberofdaysoff",
+  //   icon: <CIcon icon={cilChartPie} customClassName="nav-icon" />,
+  // },
   // {
   //   component: CNavItem,
   //   name: 'Upadate Person',
   //   to: '/upadateperson',
   //   icon: <CIcon icon={cilChartPie} customClassName="nav-icon" />,
   // },
-  {
-    component: CNavItem,
-    name: "Register Person",
-    to: "/registerperson",
-    icon: <CIcon icon={cilChartPie} customClassName="nav-icon" />,
-  },
+  // {
+  //   component: CNavItem,
+  //   name: "Register Person",
+  //   to: "/registerperson",
+  //   icon: <CIcon icon={cilChartPie} customClassName="nav-icon" />,
+  // },
   {
     component: CNavItem,
     name: "Total Income",
