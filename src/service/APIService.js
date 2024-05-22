@@ -122,10 +122,18 @@ export const getAllPersonNotEmployee = async () => {
     throw Error(error);
   }
 };
+export const deletePerson = async (personId) => {
+  try {
+    const respon = await axios.delete(url + `/person/delete?personId=${personId}`);
+    return respon.data;
+  } catch (error) {
+    throw Error(error);
+  }
+};
 
 export const addNewPerson = async (data) => {
   try {
-    const response = await axios.post(url + "/employees/save-personal", data);
+    const response = await axios.post(url + "/employee/save-personal", data);
     return response.data;
   } catch (err) {
     throw new Error(err);
@@ -134,7 +142,7 @@ export const addNewPerson = async (data) => {
 
 export const updatePersonToEmployee = async (data) => {
   try {
-    const response = await axios.post(url + "/employees/save-employee", data);
+    const response = await axios.post(url + "/employee/save-employee", data);
     return response.data;
   } catch (err) {
     throw new Error(err);

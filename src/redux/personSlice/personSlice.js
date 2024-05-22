@@ -3,7 +3,9 @@ import {
   getAllPersonNotEmployee,
   updatePersonToEmployee as updatePersonToEmployeeAPI,
   addNewPerson as addNewPersonAPI,
+  deletePerson
 } from "../../service/APIService";
+import { toast } from "react-toastify";
 
 export const getAllPerson = createAsyncThunk("getAllPerson", async () => {
   try {
@@ -34,6 +36,19 @@ export const updatePersonToEmployee = createAsyncThunk(
     }
   },
 );
+export const deletePersonByPersonId = createAsyncThunk(
+  "deletePersonByPersonId",
+  async (personId) => {
+    try {
+      const response = await deletePerson(personId);
+      toast.success(response);
+      return response;
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+);
+
 
 const initialState = {
   Loading: false,
@@ -47,7 +62,7 @@ const PersonSlice = createSlice({
   reducers: {
     updatePersonalListAfterBecomeToEmployee: (state, action) => {
       state.Personals = state.Personals.filter(
-        (person) => person.personalId === action.payload,
+        (person) => person.personalId !== action.payload,
       );
     },
   },
@@ -62,6 +77,9 @@ const PersonSlice = createSlice({
       .addCase(addNewPerson.pending, (state) => {
         state.Loading = true;
       })
+      .addCase(deletePersonByPersonId.pending, (state) => {
+        state.Loading = true;
+      })
       .addCase(getAllPerson.fulfilled, (state, action) => {
         state.Loading = false;
         state.Personals = action.payload;
@@ -70,6 +88,9 @@ const PersonSlice = createSlice({
         state.Loading = false;
       })
       .addCase(addNewPerson.fulfilled, (state) => {
+        state.Loading = false;
+      })
+      .addCase(deletePersonByPersonId.fulfilled, (state) => {
         state.Loading = false;
       })
       .addCase(getAllPerson.rejected, (state, action) => {
@@ -83,6 +104,11 @@ const PersonSlice = createSlice({
           action.error.message || "Have error when i trying to fulfill";
       })
       .addCase(addNewPerson.rejected, (state, action) => {
+        state.Loading = false;
+        state.Error =
+          action.error.message || "Have error when i trying to fulfill";
+      })
+      .addCase(deletePersonByPersonId.rejected, (state, action) => {
         state.Loading = false;
         state.Error =
           action.error.message || "Have error when i trying to fulfill";
